@@ -1,0 +1,180 @@
+{
+	/*
+	// Place your snippets for JavaScript here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	"Print to console": {
+		"prefix": "log",
+		"body": [
+			"console.log('$1');",
+			"$2"
+		],
+		"description": "Log output to console"
+	}
+*/
+	/*###########################################
+		Allgemein
+	#############################################*/
+	"Add Region": {
+		"prefix": "region",
+		"body": [
+			"//#region ${1:name}",
+			"$2",
+			"//#endregion"
+		],
+		"description": "Log output to console"
+	},
+	"Add module export": {
+		"prefix": "moduleExport",
+		"body": [
+			"module.exports = {",
+			"$1",
+			"}"
+		],
+		"description": "Add module.export template"
+	},
+	/*###########################################
+		AWS S3
+	#############################################*/
+	"AWS S3 get Object": {
+		"prefix": "awsS3Get",
+		"body": [
+			"var params = {",
+			"Bucket: bucket,",
+			"Key: key",
+			"};",
+			"",
+			"await s3.getObject(params).promise().then(data => {",
+			"console.log(data);",
+			"object = data.Body;",
+			"}).catch(err => {",
+			"console.log('ERROR MSG: ', err);",
+			"});"
+		],
+		"description": "S3 get object Code"
+	},
+	"AWS S3 Upload Object": {
+		"prefix": "awsS3Upload",
+		"body": [
+			"const params = {",
+			"Bucket: bucket,",
+			"Key: `${newKey}`,",
+			"Body: base64Data,",
+			"ACL: 'public-read',",
+			"ContentEncoding: 'base64', // required",
+			"ContentType: `image/${type}` // required. Notice the back ticks",
+			"}",
+			"",
+			"await s3.upload(params).promise().then(data => {",
+			"console.log('Successfully uploaded data');",
+			"}).catch(err => {",
+			"console.log('ERROR MSG: ', err);",
+			"});"
+		],
+		"description": "AWS S3 Upload Code"
+	},
+	/*###########################################
+		AWS Elastic Transcoder
+	#############################################*/
+	//AWS Elastic Transcoder Params
+	"AWS Elastic Transcoder Params": {
+		"prefix": "awsElasticTranscoderParams",
+		"body": [
+			"var params = {",
+			"PipelineId: pipelineId,",
+			"OutputKeyPrefix: newKey,",
+			"Input: {",
+			"Key: srcKey,",
+			"FrameRate: 'auto',",
+			"Resolution: 'auto',",
+			"AspectRatio: 'auto',",
+			"Interlaced: 'auto',",
+			"Container: 'auto'",
+			"},",
+			"Outputs: [{",
+			"Key: newKey + '.mp4',",
+			"ThumbnailPattern: 'thumbs-' + newKey + '-{resolution}-{count}',",
+			"PresetId: '1641382117587-sgcech', //Custom SLFX Generic 720p",
+			"}",
+			"],",
+			"};"
+		],
+		"description": "Log output to console"
+	},
+	/*###########################################
+		AWS DynamoDb
+	#############################################*/
+	"AWS DynamoDb GetObject": {
+		"prefix": "awsDynamoDbGetObject",
+		"body": [
+			"async getObjectFromDb() {",
+			"var result;",
+			"var params = {",
+			"TableName: $1",
+			"Key: {",
+			"name: $2",
+			" },",
+			"",
+			"await ddb.get(params).promise().then(data => {",
+			"result = data.Item;",
+			"}).catch(err => {",
+			"console.log('Error', err);",
+			"});",
+			"return secrets;"
+		],
+		"description": "Get Object from DynamoDb"
+	},
+	"AWS DynamoDb PutObject": {
+		"prefix": "awsDynamoDbPutObject",
+		"body": [
+			"async putObjectToDb() {",
+			"var success = true;",
+			"var params = {",
+			"TableName: TABLE_NAME,",
+			"ConditionExpression: '',",
+			"Item: object,",
+			"ExpressionAttributeNames: {},",
+			"ExpressionAttributeValues: {},",
+			"};",
+			"",
+			"await ddb.put(params).promise().then(data => {",
+			"",
+			"}).catch(err => {",
+			"success = false;",
+			"if (err.code == 'ConditionalCheckFailedException') {",
+			"console.log('Object already exist in DB')",
+			"} else {",
+			"console.log('Error', err);",
+			"}",
+			"});",
+			"return success;"
+		],
+		"description": "Put Object to DynamoDb"
+	},
+	"AWS DynamoDb UpdateObject": {
+		"prefix": "awsDynamoDbUpdateObject",
+		"body": [
+			"async updateObjectToDb() {",
+			"var success = true;",
+			"var params = {",
+			"TableName: $1",
+			"Key: {",
+			"",
+			"},",
+			"ExpressionAttributeValues: {},",
+			"UpdateExpression: 'set $2 = :$3'",
+			"};",
+			"",
+			"await ddb.update(params).promise().then(data => {",
+			"console.log('Object was updated')",
+			"}).catch(err => {",
+			"console.log('Error on updating object', err);",
+			"success = false;",
+			" });",
+			"return success;"
+		],
+		"description": "Put Object to DynamoDb"
+	}
+}
